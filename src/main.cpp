@@ -1,18 +1,42 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include "config.h"
+#include "sensors.h"
+
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  Serial.println("\n" PROJECT_NAME " v" PROJECT_VER);
+  sensors_set();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+
+  if (rtc.tick()) {
+    Datime dt = rtc;
+
+  Serial.print("Temperature: ");
+  Serial.print(readTemp());
+  Serial.println(" *C");
+
+  
+  Serial.print("Date: ");
+  Serial.print(dt.day);
+  Serial.print(".");
+  Serial.print(dt.month);
+  Serial.print(".");
+  Serial.println(dt.year);
+
+  Serial.print("Time: ");
+  Serial.print(dt.hour);
+  Serial.print(":");
+  Serial.print(dt.minute);
+  Serial.print(":");
+  Serial.println(dt.second);
+
+  Serial.println(rtc.getTime().toString());
+
+  }
 }
