@@ -1,23 +1,30 @@
 #pragma once
 
+#include <Arduino.h>
 #include <GyverBME280.h>
 #include <GyverDS3231.h>
+#include <GTimer.h>
+
 GyverBME280 bmp;
 GyverDS3231 rtc;
 Datime dt;
 
-int readTemp() {
+GTimerCb16<millis> _dt_sync_;
+
+// ===== ФУНКЦИИ ДАТЧИКОВ =====
+float readTemp() {
     bmp.oneMeasurement();
     while (bmp.isMeasuring());
-    return round(bmp.readTemperature());
+    return bmp.readTemperature();
 }
 
+// ===== ФУНКЦИИ ТАЙМЕРОВ =====
+void dt_sync() { dt = rtc; }
 
+
+// ===== СТАНДАРТНЫЕ ФУНКЦИИ =====
 void sensors_set() {
     
-    // фотодиод
-    pinMode(PHOTO, INPUT);
-
     // BMP280
     bmp.setHumOversampling(MODULE_DISABLE);
     bmp.setPressOversampling(MODULE_DISABLE);
@@ -37,9 +44,20 @@ void sensors_set() {
     Serial.print("RTC Reset: ");
     Serial.println(rtc.isReset());
 
-    //rtc.setBuildTime();
-
     // был сброс питания RTC, время некорректное
     if (rtc.isReset()) rtc.setBuildTime();     // установить время компиляции прошивки
 
+    dt = rtc;   // выводим в Datime
+}
+
+void sensors_begin(){
+
+    sensors_set();
+
+    // запускаем таймеры
+
+    // синхронизация datime
+    _dt_sync_.startInterval(1000, dt_sync);
+
+    
 }

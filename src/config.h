@@ -10,3 +10,9 @@
 // пины
 #define LED_PIN D13
 #define PHOTO 2
+
+
+
+void PINS_SET() {
+    pinMode(PHOTO, INPUT);
+}
