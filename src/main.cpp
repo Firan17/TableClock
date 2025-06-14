@@ -23,5 +23,11 @@ void loop() {
 
     Serial.println(dt.toString());
 
+    Serial.print("Brightness: ");
+    Serial.print(photo.readBrightness());
+    Serial.print(" ");
+    if (photo.isBright()) Serial.println("Bright!");
+    else Serial.println("Dark!");
+
   }
 }

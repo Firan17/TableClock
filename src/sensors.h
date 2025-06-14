@@ -3,10 +3,12 @@
 #include <Arduino.h>
 #include <GyverBME280.h>
 #include <GyverDS3231.h>
+#include "PhotoSensor.h"
 #include <GTimer.h>
 
 GyverBME280 bmp;
 GyverDS3231 rtc;
+PhotoSensor photo(PHOTO, BRIGHT_THRESHOLD);
 Datime dt;
 
 GTimerCb16<millis> _dt_sync_;
@@ -57,7 +59,7 @@ void sensors_begin(){
     // запускаем таймеры
 
     // синхронизация datime
-    _dt_sync_.startInterval(1000, dt_sync);
+    _dt_sync_.startInterval(MS_01S, dt_sync);
 
     
 }
