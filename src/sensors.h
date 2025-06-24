@@ -12,6 +12,7 @@ PhotoSensor photo(PHOTO, BRIGHT_THRESHOLD);
 Datime dt;
 
 GTimerCb16<millis> _dt_sync_;
+GTimerCb16<millis> _point_upd_;
 
 // ===== ФУНКЦИИ ДАТЧИКОВ =====
 float readTemp() {
@@ -21,8 +22,20 @@ float readTemp() {
 }
 
 // ===== ФУНКЦИИ ТАЙМЕРОВ =====
-void dt_sync() { dt = rtc; }
+void dt_sync() { 
+    dt = rtc; 
+    //disp.setCursor(0);
+    //disp.print(dt.second % 10);
+    //disp.update();
+    if (photo.isDark()) PWM_20KHZ_D3(200);
+    else PWM_20KHZ_D3(0); 
+}
 
+void point_update() {
+    //disp.point(0, !point);
+    //disp.update();
+    //point = !point;
+}
 
 // ===== СТАНДАРТНЫЕ ФУНКЦИИ =====
 void sensors_set() {
@@ -60,6 +73,6 @@ void sensors_begin(){
 
     // синхронизация datime
     _dt_sync_.startInterval(MS_01S, dt_sync);
-
+    _point_upd_.startInterval(MS_500, point_update);
     
 }

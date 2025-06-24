@@ -16,7 +16,7 @@
 #define CLK_595 13
 #define CS_595 9
 #define DAT_595 11
-#define EO_595 7
+#define EO_595 3
 
 // Временные константы
 #define MS_250         250
